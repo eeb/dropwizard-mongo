@@ -3,6 +3,9 @@ Connect dropwizard to MongoDB
 
 *dropwizard-mongo is a set of factories and health checks to be used with [dropwizard](http://dropwizard.github.io/dropwizard/) for connecting to MongoDB.*
 
+### Disclaimer
+This project is brand new, so I have a lot of additional work to support the multiple options that can be passed to the MongoClient and DB objects.
+
 Usage
 -----
 
