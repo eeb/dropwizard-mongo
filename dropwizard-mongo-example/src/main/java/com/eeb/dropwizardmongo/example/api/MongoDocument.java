@@ -22,8 +22,4 @@ public class MongoDocument {
         this.id = id;
     }
 
-
-
-
-
 }

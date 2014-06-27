@@ -41,7 +41,6 @@ public class CollectionIdsResource {
             cursor.close();
         }
 
-
         return l;
     }
 
