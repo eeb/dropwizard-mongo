@@ -1,0 +1,14 @@
+#Mongo connection
+mongoClient:
+    connections:
+        - host: localhost
+          port: 27017
+#        - host: 192.168.1.12
+#          port: 27017
+
+
+# Logging Settings
+logging:
+    level: INFO
+    loggers:
+        "com.eeb.example.dropwizardmongo": DEBUG
