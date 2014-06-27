@@ -12,7 +12,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class creates a single instance of the <code>MongoClient</code> object.
+ * An object of this class creates a single instance of the <code>MongoClient</code> object.
+ * <p>
+ *     To use this class add it as a field with getters and setters to your Configuration class and call the build
+ *     method in your applications run method. The resulting MongoClient can then be passed to your Resources<br/>
+ *     <p>
+ *     An example of the yaml configuration:<br/>
+ *     <br/>
+ *     <pre><code>
+ *     mongoClient:
+ *         connections:
+ *            - host: localhost
+ *              port: 27017
+ *            - host: 192.168.1.12
+ *              port: 27017
+ *     </code></pre>
+ *     </p>
+ * </p>
  */
 public class MongoClientFactory {
 
@@ -31,7 +47,7 @@ public class MongoClientFactory {
     }
 
     /**
-     * Builds the MongoClient from a set of connections specified in a
+     * Builds the MongoClient from a set of connections specified in the
      * configuration file.
      * @param env Dropwizard environment.
      * @return <code>MongoClient</code>

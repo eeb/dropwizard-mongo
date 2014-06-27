@@ -3,8 +3,10 @@ package com.eeb.dropwizardmongo.test;
 import com.codahale.metrics.health.HealthCheck;
 import com.eeb.dropwizardmongo.factory.MongoClientFactory;
 import com.eeb.dropwizardmongo.factory.MongoConnectionFactory;
+import com.eeb.dropwizardmongo.factory.MongoDBFactory;
 import com.eeb.dropwizardmongo.health.MongoHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.setup.Environment;
@@ -65,6 +67,19 @@ public class FactoryTest {
         HealthCheck.Result res = hc.execute();
         assert res.isHealthy() : "Mongo is not connected";
     }
+
+    @Test
+    public void testDBFactory() throws IOException {
+        MongoClient client = createSingleAddress();
+        assert client != null : "Mongo client is null";
+
+        MongoDBFactory dbFactory = new MongoDBFactory();
+        dbFactory.setDbName("test");
+        DB db = dbFactory.build(client);
+        assert db != null : "DB object is null";
+    }
+
+
 
     private MongoClient createSingleAddress() throws IOException {
         ArrayList<MongoConnectionFactory> connFactoryList = new ArrayList<>();
