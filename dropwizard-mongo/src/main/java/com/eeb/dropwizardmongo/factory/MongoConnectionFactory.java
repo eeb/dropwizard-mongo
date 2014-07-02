@@ -1,17 +1,13 @@
 package com.eeb.dropwizardmongo.factory;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class builds a Mongo ServerAddress object from a host and port specified in a configuration file.

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 
-import javax.validation.constraints.Null;
-
 /**
  * An object of this class will return a MongoDB DB object for the dbName property specified in the configuration
  * file.
@@ -34,8 +32,8 @@ public class MongoDBFactory {
     }
 
     @JsonProperty
-    public void setDbName(String dbName) {
-        this.dbName = dbName;
+    public void setDbName() {
+        this.dbName = "test";
     }
 
 

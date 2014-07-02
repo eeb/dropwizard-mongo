@@ -74,7 +74,7 @@ public class FactoryTest {
         assert client != null : "Mongo client is null";
 
         MongoDBFactory dbFactory = new MongoDBFactory();
-        dbFactory.setDbName("test");
+        dbFactory.setDbName();
         DB db = dbFactory.build(client);
         assert db != null : "DB object is null";
     }
@@ -86,8 +86,7 @@ public class FactoryTest {
         connFactoryList.add(mapper.readValue("{\"host\":\"localhost\",\"port\":27017}", MongoConnectionFactory.class));
         clientFactory.setConnections(connFactoryList);
 
-        MongoClient client = clientFactory.build(env);
-        return client;
+        return clientFactory.build(env);
     }
 
 }

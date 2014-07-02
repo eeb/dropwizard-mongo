@@ -5,7 +5,8 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientException;
 
 /**
- * Created by eeb on 6/23/14.
+ * This HealthCheck checks if the MongoDB specified in the configuration file
+ * is reachable.
  */
 public class MongoHealthCheck extends HealthCheck {
 
@@ -16,6 +17,11 @@ public class MongoHealthCheck extends HealthCheck {
         this.mongoClient = mongoClient;
     }
 
+    /**
+     * Checks if the system database, which exists in all MongoDB instances can be reached.
+     * @return A Result object
+     * @throws Exception
+     */
     @Override
     protected Result check() throws Exception {
 
