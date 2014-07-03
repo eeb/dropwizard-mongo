@@ -32,7 +32,8 @@ If you want to pass around the DB object you will need to further specify the db
       dbName: test        
       
 ### Updating you configuration
-You will need to add referemces to the factories you wish to use in your class that extends Configuration.
+You will need to add references to the factories you wish to use in your class that extends Configuration or 
+you can extend from com.eeb.dropwizardmongo.configuration.DropwizardMongoConfiguration.
 
       @Valid
       @NotNull

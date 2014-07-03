@@ -1,7 +1,7 @@
 package com.eeb.dropwizardmongo.test;
 
 import com.eeb.dropwizardmongo.example.DropwizardMongoApplication;
-import com.eeb.dropwizardmongo.example.DropwizardMongoConfiguration;
+import com.eeb.dropwizardmongo.configuration.DropwizardMongoConfiguration;
 import com.eeb.dropwizardmongo.example.api.MongoDocument;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,4 +1,4 @@
-package com.eeb.dropwizardmongo.example;
+package com.eeb.dropwizardmongo.configuration;
 
 import com.eeb.dropwizardmongo.factory.MongoClientFactory;
 import com.eeb.dropwizardmongo.factory.MongoDBFactory;
@@ -9,7 +9,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by eeb on 6/11/14.
+ * This class can be used as is or extended to provide support for configuration options for your dropwizard-mongo
+ * application.
  */
 public class DropwizardMongoConfiguration extends Configuration {
 

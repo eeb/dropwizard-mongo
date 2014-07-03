@@ -1,5 +1,6 @@
 package com.eeb.dropwizardmongo.example;
 
+import com.eeb.dropwizardmongo.configuration.DropwizardMongoConfiguration;
 import com.eeb.dropwizardmongo.health.MongoHealthCheck;
 import com.eeb.dropwizardmongo.example.resources.CollectionIdsResource;
 import com.mongodb.DB;
