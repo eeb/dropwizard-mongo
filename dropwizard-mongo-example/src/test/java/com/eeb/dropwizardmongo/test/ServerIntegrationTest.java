@@ -24,7 +24,7 @@ import java.util.List;
  *
  *
  */
-public class ServerTest {
+public class ServerIntegrationTest {
 
     @ClassRule
     public static final DropwizardAppRule<DropwizardMongoConfiguration> rule =

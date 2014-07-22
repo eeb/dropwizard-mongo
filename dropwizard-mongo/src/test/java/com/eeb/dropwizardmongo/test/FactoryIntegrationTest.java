@@ -22,12 +22,13 @@ import static org.mockito.Mockito.when;
 /**
  * Integration test for the factory classes. The test will require an available Mongo instance.
  */
-public class FactoryTest {
+public class FactoryIntegrationTest {
 
     private final MongoClientFactory clientFactory = new MongoClientFactory();
     private final LifecycleEnvironment lEnv = mock(LifecycleEnvironment.class);
     private final Environment env = mock(Environment.class);
     private final ObjectMapper mapper = new ObjectMapper();
+    private final String port = "27017";
 
 
     @Before
@@ -40,7 +41,7 @@ public class FactoryTest {
     public void singleAddressTest() throws IOException {
         MongoClient client = createSingleAddress();
         assert client != null : "Mongo client is null";
-        assert client.getAddress().toString().equals("localhost:27017") : "Client does not contain an address";
+        assert client.getAddress().toString().equals("localhost:"+port+"") : "Client does not contain an address";
 
     }
 
@@ -49,12 +50,12 @@ public class FactoryTest {
     public void multipleAddressTest() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         ArrayList<MongoConnectionFactory> connFactoryList = new ArrayList<>();
-        connFactoryList.add(mapper.readValue("{\"host\":\"localhost\",\"port\":27017}", MongoConnectionFactory.class));
-        connFactoryList.add(mapper.readValue("{\"host\":\"192.168.0.25\",\"port\":27017}", MongoConnectionFactory.class));
+        connFactoryList.add(mapper.readValue("{\"host\":\"localhost\",\"port\":"+port+"}", MongoConnectionFactory.class));
+        connFactoryList.add(mapper.readValue("{\"host\":\"192.168.0.25\",\"port\":"+port+"}", MongoConnectionFactory.class));
 
         clientFactory.setConnections(connFactoryList);
         MongoClient client = clientFactory.build(env);
-        assert client.getAddress().toString().equals("localhost:27017") : "Client does not contain an address";
+        assert client.getAddress().toString().equals("localhost:"+port+"") : "Client does not contain an address";
 
     }
 
@@ -83,7 +84,7 @@ public class FactoryTest {
 
     private MongoClient createSingleAddress() throws IOException {
         ArrayList<MongoConnectionFactory> connFactoryList = new ArrayList<>();
-        connFactoryList.add(mapper.readValue("{\"host\":\"localhost\",\"port\":27017}", MongoConnectionFactory.class));
+        connFactoryList.add(mapper.readValue("{\"host\":\"localhost\",\"port\":"+port+"}", MongoConnectionFactory.class));
         clientFactory.setConnections(connFactoryList);
 
         return clientFactory.build(env);
