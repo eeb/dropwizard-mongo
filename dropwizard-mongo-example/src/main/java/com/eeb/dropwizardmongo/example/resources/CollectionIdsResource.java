@@ -28,10 +28,10 @@ public class CollectionIdsResource {
 
     @GET
     public List<MongoDocument> fetch(@PathParam("collection") String collection) {
-        JacksonDBCollection<MongoDocument, String> coll = JacksonDBCollection.wrap(mongoDB.getCollection(collection), MongoDocument.class,
+        final JacksonDBCollection<MongoDocument, String> coll = JacksonDBCollection.wrap(mongoDB.getCollection(collection), MongoDocument.class,
                 String.class);
-        DBCursor<MongoDocument> cursor = coll.find();
-        List<MongoDocument> l = new ArrayList<>();
+        final DBCursor<MongoDocument> cursor = coll.find();
+        final List<MongoDocument> l = new ArrayList<>();
 
         try {
             while(cursor.hasNext()) {

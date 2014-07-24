@@ -55,7 +55,7 @@ public class MongoClientFactory {
      */
     public MongoClient build(Environment env) throws UnknownHostException {
 
-        MongoClient client = new MongoClient(buildServerAddresses(getConnections(),env));
+        final MongoClient client = new MongoClient(buildServerAddresses(getConnections(),env));
 
                 env.lifecycle().manage(new Managed() {
                     @Override
@@ -76,7 +76,7 @@ public class MongoClientFactory {
 
 
     private List<ServerAddress> buildServerAddresses(List<MongoConnectionFactory> conns, Environment env) throws UnknownHostException {
-        List<ServerAddress> sal = new ArrayList<>(conns.size());
+        final List<ServerAddress> sal = new ArrayList<>(conns.size());
         for(MongoConnectionFactory factory : conns) {
             sal.add(factory.build(env));
         }

@@ -40,8 +40,8 @@ public class ServerIntegrationTest {
 
     @Before
     public void before() {
-        DB test = mongoClient.getDB("test");
-        DBCollection coll = test.getCollection("test");
+        final DB test = mongoClient.getDB("test");
+        final DBCollection coll = test.getCollection("test");
         coll.remove(new BasicDBObject());
 
         coll.insert(new BasicDBObject());
@@ -53,13 +53,13 @@ public class ServerIntegrationTest {
     @Test
     public void getIds() throws IOException {
 
-        Client client = new Client();
+        final Client client = new Client();
 
-        ClientResponse response = client.resource(
+        final ClientResponse response = client.resource(
                 "http://localhost:8080/test").get(ClientResponse.class);
 
 
-        ObjectMapper mapper = new ObjectMapper();
+        final ObjectMapper mapper = new ObjectMapper();
         List<MongoDocument> mList = mapper.readValue(response.getEntity(String.class), List.class);
 
         assert mList.size() == 2 : "There are only " + mList.size() + " documents in the collection. Expected 2";

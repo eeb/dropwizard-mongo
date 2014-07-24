@@ -39,7 +39,7 @@ public class FactoryIntegrationTest {
 
     @Test
     public void singleAddressTest() throws IOException {
-        MongoClient client = createSingleAddress();
+        final MongoClient client = createSingleAddress();
         assert client != null : "Mongo client is null";
         assert client.getAddress().toString().equals("localhost:"+port+"") : "Client does not contain an address";
 
@@ -48,42 +48,42 @@ public class FactoryIntegrationTest {
     //@Test
     //TODO:Setup a replica
     public void multipleAddressTest() throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        ArrayList<MongoConnectionFactory> connFactoryList = new ArrayList<>();
+        final ObjectMapper mapper = new ObjectMapper();
+        final ArrayList<MongoConnectionFactory> connFactoryList = new ArrayList<>();
         connFactoryList.add(mapper.readValue("{\"host\":\"localhost\",\"port\":"+port+"}", MongoConnectionFactory.class));
         connFactoryList.add(mapper.readValue("{\"host\":\"192.168.0.25\",\"port\":"+port+"}", MongoConnectionFactory.class));
 
         clientFactory.setConnections(connFactoryList);
-        MongoClient client = clientFactory.build(env);
+        final MongoClient client = clientFactory.build(env);
         assert client.getAddress().toString().equals("localhost:"+port+"") : "Client does not contain an address";
 
     }
 
     @Test
     public void testHealthCheck() throws IOException {
-        MongoClient client = createSingleAddress();
+        final MongoClient client = createSingleAddress();
         assert client != null : "Mongo client is null";
 
-        MongoHealthCheck hc = new MongoHealthCheck(client);
-        HealthCheck.Result res = hc.execute();
+        final MongoHealthCheck hc = new MongoHealthCheck(client);
+        final HealthCheck.Result res = hc.execute();
         assert res.isHealthy() : "Mongo is not connected";
     }
 
     @Test
     public void testDBFactory() throws IOException {
-        MongoClient client = createSingleAddress();
+        final MongoClient client = createSingleAddress();
         assert client != null : "Mongo client is null";
 
-        MongoDBFactory dbFactory = new MongoDBFactory();
+        final MongoDBFactory dbFactory = new MongoDBFactory();
         dbFactory.setDbName();
-        DB db = dbFactory.build(client);
+        final DB db = dbFactory.build(client);
         assert db != null : "DB object is null";
     }
 
 
 
     private MongoClient createSingleAddress() throws IOException {
-        ArrayList<MongoConnectionFactory> connFactoryList = new ArrayList<>();
+        final ArrayList<MongoConnectionFactory> connFactoryList = new ArrayList<>();
         connFactoryList.add(mapper.readValue("{\"host\":\"localhost\",\"port\":"+port+"}", MongoConnectionFactory.class));
         clientFactory.setConnections(connFactoryList);
 
