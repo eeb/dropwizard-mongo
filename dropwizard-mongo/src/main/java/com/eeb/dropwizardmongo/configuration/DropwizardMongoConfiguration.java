@@ -42,3 +42,4 @@ public class DropwizardMongoConfiguration extends Configuration {
         this.mongoClientFactory = mongoClientFactory;
     }
 }
+ 

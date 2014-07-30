@@ -34,3 +34,4 @@ public class DropwizardMongoApplication extends Application<DropwizardMongoConfi
 
     }
 }
+ 
