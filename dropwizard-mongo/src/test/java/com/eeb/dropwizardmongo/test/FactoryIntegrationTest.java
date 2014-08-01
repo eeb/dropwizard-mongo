@@ -1,12 +1,14 @@
 package com.eeb.dropwizardmongo.test;
 
 import com.codahale.metrics.health.HealthCheck;
+import com.eeb.dropwizardmongo.exceptions.NullCollectionNameException;
 import com.eeb.dropwizardmongo.exceptions.NullDBNameException;
 import com.eeb.dropwizardmongo.factory.MongoFactory;
 import com.eeb.dropwizardmongo.factory.ServerAddressBuilder;
 import com.eeb.dropwizardmongo.health.MongoHealthCheck;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.DB;
+import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
 import io.dropwizard.setup.Environment;
@@ -70,7 +72,7 @@ public class FactoryIntegrationTest {
     }
 
     @Test
-    public void testDBConnection() throws IOException, NullDBNameException {
+    public void testDBFactory() throws IOException, NullDBNameException {
 
         final MongoFactory mongoFactory = mapper.readValue(config, MongoFactory.class);
         final DB db = mongoFactory.buildDB(env);
@@ -78,6 +80,14 @@ public class FactoryIntegrationTest {
 
     }
 
+    @Test
+    public void testCollectionFactory() throws IOException, NullDBNameException, NullCollectionNameException {
+
+        final MongoFactory mongoFactory = mapper.readValue(config, MongoFactory.class);
+        final DBCollection coll = mongoFactory.buildColl(env);
+        assert coll != null : "Database object was not created";
+
+    }
 
 
 

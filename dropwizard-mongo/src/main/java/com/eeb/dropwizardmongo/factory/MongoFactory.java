@@ -54,6 +54,11 @@ public class MongoFactory {
      */
     private String collName;
 
+    /**
+     * The mongo API documentation for <a href="https://api.mongodb.org/java/current/com/mongodb/MongoClient.html">
+     * MongoClient</a> states that there should only be one object per JVM, so this property is only set once.
+     */
+    private MongoClient mongoClient;
 
     @JsonProperty
     public String getCollName() {
@@ -94,6 +99,9 @@ public class MongoFactory {
      */
     public MongoClient buildClient(Environment env) throws UnknownHostException {
 
+        if(this.mongoClient != null)
+            return mongoClient;
+
         final MongoClient client = new MongoClient(buildServerAddresses(getConnections(),env));
 
                 env.lifecycle().manage(new Managed() {
@@ -108,6 +116,7 @@ public class MongoFactory {
                     }
                 });
 
+        this.mongoClient = client;
 
         return client;
 
