@@ -1,7 +1,6 @@
 package com.eeb.dropwizardmongo.configuration;
 
-import com.eeb.dropwizardmongo.factory.MongoClientFactory;
-import com.eeb.dropwizardmongo.factory.MongoDBFactory;
+import com.eeb.dropwizardmongo.factory.MongoFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 
@@ -17,28 +16,17 @@ public class DropwizardMongoConfiguration extends Configuration {
 
     @Valid
     @NotNull
-    private MongoClientFactory mongoClientFactory = new MongoClientFactory();
-
-    @Valid
-    private MongoDBFactory mongoDBFactory = new MongoDBFactory();
+    private MongoFactory mongoFactory = new MongoFactory();
 
     @JsonProperty("mongoDB")
-    public MongoDBFactory getMongoDBFactory() {
-        return mongoDBFactory;
+    public MongoFactory getMongoFactory() {
+        return this.mongoFactory;
     }
 
     @JsonProperty("mongoDB")
-    public void setMongoDBFactory(MongoDBFactory mongoDBFactory) {
-        this.mongoDBFactory = mongoDBFactory;
+    public void setMongoFactory(MongoFactory MongoFactory) {
+        this.mongoFactory = MongoFactory;
     }
 
-    @JsonProperty("mongoClient")
-    public MongoClientFactory getMongoClientFactory() {
-        return mongoClientFactory;
-    }
 
-    @JsonProperty("mongoClient")
-    public void setMongoClientFactory(MongoClientFactory mongoClientFactory) {
-        this.mongoClientFactory = mongoClientFactory;
-    }
 }

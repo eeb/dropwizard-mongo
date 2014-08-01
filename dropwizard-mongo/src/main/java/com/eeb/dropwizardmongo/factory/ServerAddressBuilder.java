@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
  * This class builds a Mongo ServerAddress object from a host and port specified in a configuration file.
  *
  */
-public class MongoConnectionFactory {
+public class ServerAddressBuilder {
 
     @NotNull
     private String host;
