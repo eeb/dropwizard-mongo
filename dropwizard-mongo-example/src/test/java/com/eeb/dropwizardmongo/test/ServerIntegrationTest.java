@@ -3,7 +3,6 @@ package com.eeb.dropwizardmongo.test;
 import com.eeb.dropwizardmongo.example.DropwizardMongoApplication;
 import com.eeb.dropwizardmongo.configuration.DropwizardMongoConfiguration;
 import com.eeb.dropwizardmongo.example.api.MongoDocument;
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -35,7 +34,7 @@ public class ServerIntegrationTest {
 
     @BeforeClass
     public static void setup() throws UnknownHostException {
-        mongoClient = rule.getConfiguration().getMongoClientFactory().build(rule.getEnvironment());
+        mongoClient = rule.getConfiguration().getMongoFactory().buildClient(rule.getEnvironment());
     }
 
     @Before

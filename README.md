@@ -1,13 +1,13 @@
-Connect dropwizard to MongoDB 
-=============================
+#Connect dropwizard to MongoDB 
+
 
 *dropwizard-mongo is a set of factories and health checks to be used with [dropwizard](http://dropwizard.github.io/dropwizard/) for connecting to MongoDB.*
 
-### Disclaimer
-This project is brand new, so I have a lot of additional work to support the multiple options that can be passed to the MongoClient and DB objects.
+## Disclaimer
+Update 8/1: Major refactor that simplifies usage. Thanks to [kgilmer](https://github.com/kgilmer) for the review.  
+This project is brand new, so I have a lot of additional work to support the multiple options that can be passed to the MongoClient, DB, and DBCollection objects.
 
-Usage
------
+##Usage
 
 ### Installation
 
@@ -17,98 +17,114 @@ I recommend you use dropwizard-mongo in combination with the [MongoJack](http://
 
 ### Updating Your yaml
 
-If you are planning on just passing around a MongoClient object you can specify the connections in you config file.
+If you want the factory to build a [MongoClient](https://api.mongodb.org/java/current/com/mongodb/MongoClient.html) object you can specify the connections in you config file.
 
-    mongoClient:
+    mongoDB:
       connections:
         - host: localhost
           port: 27017
         - host: 192.168.1.12
           port: 27017
               
-If you want to pass around the DB object you will need to further specify the db name in the config.
+If you want to the factory to build a [DB](https://api.mongodb.org/java/current/com/mongodb/DB.html) object you will need to further specify the db name in the config.
 
     mongoDB:
-      dbName: test        
+        dbName: unittest
+        connections:
+            - host: localhost
+              port: 27017
+            - host: 192.168.1.12
+              port: 27017
+
+Finally, the factory can return a [DBCollection](https://api.mongodb.org/java/current/com/mongodb/DBCollection.html) object
+ you will need to further specify the collection name in the config.
+
+    mongoDB:
+        dbName: unittest
+        collName: test
+        connections:
+            - host: localhost
+              port: 27017
+            - host: 192.168.1.12
+              port: 27017
+                
       
 ### Updating you configuration
-You will need to add references to the factories you wish to use in your class that extends Configuration or 
+You will need to add a reference to MongoFactory in your class that extends Configuration or 
 you can extend from com.eeb.dropwizardmongo.configuration.DropwizardMongoConfiguration.
 
-      @Valid
-      @NotNull
-      private MongoClientFactory mongoClientFactory = new MongoClientFactory();
-  
-      @Valid
-      private MongoDBFactory mongoDBFactory = new MongoDBFactory();
-  
-      @JsonProperty("mongoDB")
-      public MongoDBFactory getMongoDBFactory() {
-          return mongoDBFactory;
-      }
-  
-      @JsonProperty("mongoDB")
-      public void setMongoDBFactory(MongoDBFactory mongoDBFactory) {
-          this.mongoDBFactory = mongoDBFactory;
-      }
-  
-      @JsonProperty("mongoClient")
-      public MongoClientFactory getMongoClientFactory() {
-          return mongoClientFactory;
-      }
-  
-      @JsonProperty("mongoClient")
-      public void setMongoClientFactory(MongoClientFactory mongoClientFactory) {
-          this.mongoClientFactory = mongoClientFactory;
-      }
+    @Valid
+    @NotNull
+    private MongoFactory mongoFactory = new MongoFactory();
+      
+    @JsonProperty("mongoDB")
+    public MongoFactory getMongoFactory() {
+        return this.mongoFactory;
+    }
+      
+    @JsonProperty("mongoDB")
+    public void setMongoFactory(MongoFactory MongoFactory) {
+        this.mongoFactory = MongoFactory;
+    }         
       
       
 
 ### Update your applications run method
-Your class that extends from Application needs to updated to build the MongoClient and DB.
+Your class that extends from Application needs to be updated to register the health checks and call the 
+factory method you wish to use. Once you have the object you want you can pass it to your dropwizard resources.
 
-        MongoClient mongoClient = config.getMongoClientFactory().build(environment);
-        DB db = config.getMongoDBFactory().build(mongoClient);
+#### Registering the health checks
+     final MongoClient mongoClient = config.getMongoFactory().buildClient(environment);
+     environment.healthChecks().register("mongo",new MongoHealthCheck(mongoClient));
 
-        //Register health checks
-        environment.healthChecks().register("mongo",new MongoHealthCheck(mongoClient));
-
-        //Register Resources
-        environment.jersey().register(new CollectionIdsResource(db));
+#### Building a MongoClient object
+     final MongoClient mongoClient = config.getMongoFactory().buildClient(environment); 
+     //Register Resources
+     environment.jersey().register(new CollectionIdsResource(mongoClient));
       
-You can see in this case I am passing the DB object to a Resources. You can also pass the MongoClient object and set the DB in the Resource itself. Both objects are stated to be thread safe.
+#### Building a DB object
+     final DB db = config.getMongoFactory().buildDB(environment); 
+     //Register Resources
+     environment.jersey().register(new CollectionIdsResource(db));
+    
+#### Building a DBCollection object    
+    final DBCollection coll = config.getMongoFactory().buildColl(environment); 
+    //Register Resources
+    environment.jersey().register(new CollectionIdsResource(coll));
+         
+### Using MongoJack with dropwizard-mongo
 
-### Using MongoJack
-The secret sauce here is MongoJack. It lets me pass my Jackson API objects directly to the MongoDB API as well as returning the results of querries as my API objects.
-
+The secret sauce here is MongoJack. It lets me pass my Jackson API objects directly to the MongoDB API as well as returning the results of queries as my API objects.
 
 Super basic API object representing a MongoDB document:
 
-public class MongoDocument {
+    public class MongoDocument {
 
-    private String id;
+        private String id;
 
-    @ObjectId
-    @JsonProperty("_id")
-    public String getId() {
-        return this.id;
+        @ObjectId
+        @JsonProperty("_id")
+        public String getId() {
+            return this.id;
+        }
+    
+        @ObjectId
+        @JsonProperty("_id")
+        public void setId(String id) {
+            this.id = id;
+        }
+
     }
 
-    @ObjectId
-    @JsonProperty("_id")
-    public void setId(String id) {
-        this.id = id;
-    }
-
-  }
-
-My Resources GET handler.
+My Resource's GET handler.
 
     @GET
     public List<MongoDocument> fetch(@PathParam("collection") String collection) {
+       
         JacksonDBCollection<MongoDocument, String> coll = JacksonDBCollection.wrap(mongoDB.getCollection(collection), MongoDocument.class,
                 String.class);
         DBCursor<MongoDocument> cursor = coll.find();
+       
         List<MongoDocument> l = new ArrayList<>();
 
         try {
@@ -122,5 +138,5 @@ My Resources GET handler.
         return l;
     }
 
-MongoJack provides wrappers for the standard MongoDB api calls that will marshall MongoDB documents into objects that are Jackson anotated. 
+MongoJack provides wrappers for the standard MongoDB api calls that will parse MongoDB documents into objects that are Jackson annotated. 
 

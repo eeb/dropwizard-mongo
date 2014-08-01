@@ -22,8 +22,8 @@ public class DropwizardMongoApplication extends Application<DropwizardMongoConfi
     @Override
     public void run(DropwizardMongoConfiguration config, Environment environment) throws Exception {
 
-        final MongoClient mongoClient = config.getMongoClientFactory().build(environment);
-        final DB db = config.getMongoDBFactory().build(mongoClient);
+        final MongoClient mongoClient = config.getMongoFactory().buildClient(environment);
+        final DB db = config.getMongoFactory().buildDB(environment);
 
         //Register health checks
         environment.healthChecks().register("mongo",new MongoHealthCheck(mongoClient));
