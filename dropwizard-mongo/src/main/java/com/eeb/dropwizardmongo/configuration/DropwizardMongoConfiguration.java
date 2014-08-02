@@ -1,6 +1,7 @@
 package com.eeb.dropwizardmongo.configuration;
 
 import com.eeb.dropwizardmongo.factory.MongoFactory;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
 
@@ -18,14 +19,14 @@ public class DropwizardMongoConfiguration extends Configuration {
     @NotNull
     private MongoFactory mongoFactory = new MongoFactory();
 
-    @JsonProperty("mongoDB")
-    public MongoFactory getMongoFactory() {
-        return this.mongoFactory;
+    @JsonCreator
+    public DropwizardMongoConfiguration(@JsonProperty("mongoDB") MongoFactory mongoFactory) {
+        this.mongoFactory = mongoFactory;
     }
 
     @JsonProperty("mongoDB")
-    public void setMongoFactory(MongoFactory MongoFactory) {
-        this.mongoFactory = MongoFactory;
+    public MongoFactory getMongoFactory() {
+        return this.mongoFactory;
     }
 
 
