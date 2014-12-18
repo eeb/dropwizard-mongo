@@ -13,7 +13,7 @@ This project is brand new, so I have a lot of additional work to support the mul
 
 The project artifacts are not currently hosted in a maven repository, so you will need to clone the repo and build the dropwizard-mongo project at a minimum.
 
-I recommend you use dropwizard-mongo in combination with the [MongoJack](http://mongojack.org/) project for quickest implementation. The dropwizard-mongo-example project shows an example of using MonoJack with dropwizard-mongo.
+I recommend you use dropwizard-mongo in combination with the [MongoJack](http://mongojack.org/) project for quickest implementation. The dropwizard-mongo-example project shows an example of using MongoJack with dropwizard-mongo.
 
 ### Updating Your yaml
 
