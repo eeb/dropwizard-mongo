@@ -8,11 +8,14 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.glassfish.jersey.client.ClientResponse;
 import org.junit.*;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -50,16 +53,13 @@ public class ServerIntegrationTest {
 
 
     @Test
-    public void getIds() throws IOException {
+    public void getIds() throws Exception {
+        final Client client = ClientBuilder.newClient();
 
-        final Client client = new Client();
+        final Response response = client.target(
+                "http://localhost:8080/").path("test/").request(MediaType.APPLICATION_JSON_TYPE).get();
 
-        final ClientResponse response = client.resource(
-                "http://localhost:8080/test").get(ClientResponse.class);
-
-
-        final ObjectMapper mapper = new ObjectMapper();
-        List<MongoDocument> mList = mapper.readValue(response.getEntity(String.class), List.class);
+        List<MongoDocument> mList = response.readEntity(List.class);
 
         assert mList.size() == 2 : "There are only " + mList.size() + " documents in the collection. Expected 2";
 

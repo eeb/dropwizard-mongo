@@ -17,7 +17,7 @@
     </modules>
 
     <properties>
-        <dropwizard.version>0.7.1</dropwizard.version>
+        <dropwizard.version>0.8.0-rc2</dropwizard.version>
     </properties>
 
 
