@@ -5,7 +5,7 @@
 
     <groupId>com.eeb.dropwizardmongo</groupId>
     <artifactId>parent</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.2</version>
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -17,8 +17,16 @@
     </modules>
 
     <properties>
-        <dropwizard.version>0.7.1</dropwizard.version>
+        <dropwizard.version>0.8.0</dropwizard.version>
     </properties>
+
+  <distributionManagement>
+    <repository>
+      <id>internal.repo</id>
+      <name>Temporary Staging Repository</name>
+      <url>file://${project.build.directory}/mvn-repo</url>
+    </repository>
+  </distributionManagement>
 
 
     <build>

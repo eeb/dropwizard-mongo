@@ -1,22 +1,22 @@
 package com.eeb.dropwizardmongo.test;
 
-import com.eeb.dropwizardmongo.example.DropwizardMongoApplication;
 import com.eeb.dropwizardmongo.configuration.DropwizardMongoConfiguration;
+import com.eeb.dropwizardmongo.example.DropwizardMongoApplication;
 import com.eeb.dropwizardmongo.example.api.MongoDocument;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.MongoClient;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.glassfish.jersey.client.ClientResponse;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.List;
 
@@ -26,12 +26,12 @@ import java.util.List;
  *
  *
  */
-public class ServerIntegrationTest {
+public class ServerIntegrationUriTest {
 
     @ClassRule
     public static final DropwizardAppRule<DropwizardMongoConfiguration> rule =
             new DropwizardAppRule<>(DropwizardMongoApplication.class,
-                    ClassLoader.getSystemClassLoader().getResource("config.yaml").getPath());
+                    ClassLoader.getSystemClassLoader().getResource("config-uri.yaml").getPath());
 
     protected static MongoClient mongoClient;
 

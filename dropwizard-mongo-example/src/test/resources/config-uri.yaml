@@ -1,0 +1,10 @@
+#Mongo connection
+mongoDB:
+    dbName: test
+    uri: mongodb://localhost:27017
+
+# Logging Settings
+logging:
+    level: INFO
+    loggers:
+        "com.eeb.example.dropwizardmongo": DEBUG
