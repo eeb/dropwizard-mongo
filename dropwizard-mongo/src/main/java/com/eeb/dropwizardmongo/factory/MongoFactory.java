@@ -3,10 +3,7 @@ package com.eeb.dropwizardmongo.factory;
 import com.eeb.dropwizardmongo.exceptions.NullCollectionNameException;
 import com.eeb.dropwizardmongo.exceptions.NullDBNameException;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.MongoClient;
-import com.mongodb.ServerAddress;
+import com.mongodb.*;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.setup.Environment;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -27,6 +24,7 @@ import java.util.List;
  *     mongoClient:
  *         dbname: unittest
  *         collName: test1
+ *         uri:
  *         connections:
  *            - host: localhost
  *              port: 27017
@@ -41,7 +39,6 @@ public class MongoFactory {
     /**
      * List of server addresses
      */
-    @NotEmpty
     private List<ServerAddressBuilder> connections = new ArrayList<>();
 
     /**
@@ -53,6 +50,11 @@ public class MongoFactory {
      * Optional name of the collection to be set. The property is required to use the collBuild method.
      */
     private String collName;
+
+    /**
+     * Optional mongo db uri to connect to. Provide this instead of connections.
+     */
+    private String uri;
 
     /**
      * The mongo API documentation for <a href="https://api.mongodb.org/java/current/com/mongodb/MongoClient.html">
@@ -81,6 +83,11 @@ public class MongoFactory {
     }
 
     @JsonProperty
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    @JsonProperty
     public List<ServerAddressBuilder> getConnections() {
         return connections;
     }
@@ -102,24 +109,33 @@ public class MongoFactory {
         if(this.mongoClient != null)
             return mongoClient;
 
-        final MongoClient client = new MongoClient(buildServerAddresses(getConnections(),env));
 
-                env.lifecycle().manage(new Managed() {
-                    @Override
-                    public void start() throws Exception {
+        final MongoClient client = createClient(env);
 
-                    }
+        env.lifecycle().manage(new Managed() {
+            @Override
+            public void start() throws Exception {
 
-                    @Override
-                    public void stop() throws Exception {
-                        client.close();
-                    }
-                });
+            }
+
+            @Override
+            public void stop() throws Exception {
+                client.close();
+            }
+        });
 
         this.mongoClient = client;
 
         return client;
 
+    }
+
+    private MongoClient createClient(Environment env) throws UnknownHostException {
+        if(this.uri != null) {
+            MongoClientURI clientURI = new MongoClientURI(this.uri);
+            return new MongoClient(clientURI);
+        }
+        return new MongoClient(buildServerAddresses(getConnections(),env));
     }
 
     /**
